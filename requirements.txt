@@ -1,0 +1,9 @@
+pandas
+numpy
+matplotlib
+autopep8
+pylint
+pytest
+shap
+joblib
+seaborn
