@@ -284,8 +284,6 @@ def train_models(x_train: pd.DataFrame,
     output:
               None
     """
-    if not path.exists(path.join(output_pth, 'images', 'models')):
-        os.makedirs(path.join(output_pth, 'images', 'models'))
 
     if not path.exists(path.join(output_pth, 'models')):
         os.makedirs(path.join(output_pth, 'models'))

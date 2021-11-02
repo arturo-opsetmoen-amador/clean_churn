@@ -5,9 +5,9 @@ import os
 from os import path
 import logging
 import pandas as pd
-import churn_library as cl
 import constants
 import joblib
+import churn_library as cl
 
 
 def test_import(test_dataframe):
