@@ -12,4 +12,9 @@ COPY --chown=arturo_docker:arturo_docker requirements.txt requirements.txt
 ENV PATH "$PATH:/home/arturo_docker/.local/bin"
 RUN pip install --user -r requirements.txt
 ENV PATH "$PATH:/home/arturo_docker/.local/bin"
+RUN git clone https://github.com/digitalemerge/clean_churn
+
 ENV PYTHONPATH "${PYTHONPATH}:/home/arturo_docker/mount/Documents/udacity/MLEng/Module1/clean_churn/tests:/home/arturo_docker/mount/Documents/udacity/MLEng/Module1/clean_churn:"
+
+RUN ["chmod", "+x", "/home/arturo_docker/clean_churn/run.sh"]
+ENTRYPOINT ["/home/arturo_docker/clean_churn/run.sh"]
