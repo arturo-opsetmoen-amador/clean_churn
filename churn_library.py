@@ -5,7 +5,6 @@ Improve the doc string after looking at some examples and best practices.
 """
 
 
-# import libraries
 import os
 import pathlib
 import typing
@@ -14,17 +13,14 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
-import constants
 import shap
 import joblib
-from sklearn.preprocessing import normalize
 from sklearn.model_selection import train_test_split
-
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
-
-from sklearn.metrics import plot_roc_curve, classification_report
+from sklearn.metrics import classification_report
+import constants
 
 
 def import_data(pth: typing.Union[str, pathlib.Path]) -> pd.DataFrame:
@@ -65,38 +61,30 @@ def perform_eda(dataframe: pd.DataFrame, out_path: str):
     """
     if not path.exists(path.join(out_path, 'images', 'eda')):
         os.makedirs(path.join(out_path, 'images', 'eda'))
-    for column in constants.HISTOGRAM_COLS:
-        plt.figure(figsize=(20, 10))
-        axis = dataframe[column].hist()
-        axis.set_title(column)
-        fig = axis.get_figure()
-        fig.savefig(path.join(out_path, 'images', 'eda', column + '.pdf'))
 
-    for column in constants.VALUE_COUNT_COL:
+    for analysis in constants.EDA_ANALYSIS:
         plt.figure(figsize=(20, 10))
-        axis = dataframe[column].value_counts('normalize').plot(kind='bar')
-        axis.set_title(column)
+        if analysis == "Churn" or analysis == 'Customer_Age':
+            axis = dataframe[analysis].hist()
+        elif analysis == 'Marital_Status':
+            axis = dataframe[analysis].value_counts('normalize').plot(kind='bar')
+        elif analysis == 'Total_Trans_Ct':
+            axis = sns.histplot(
+                dataframe[analysis],
+                kde=True,
+                stat='density',
+                linewidth=0)
+        elif analysis == 'Correlations':
+            axis = sns.heatmap(
+                dataframe.corr(),
+                annot=False,
+                cmap='Dark2_r',
+                linewidths=2)
+        axis.set_title(analysis)
         fig = axis.get_figure()
-        fig.savefig(path.join(out_path, 'images', 'eda', column + '.pdf'))
+        fig.savefig(path.join(out_path, 'images', 'eda', analysis + '.pdf'))
+        plt.close()
 
-    for column in constants.DISTRIBUTION_COL:
-        plt.figure(figsize=(20, 10))
-        axis = sns.histplot(
-            dataframe[column],
-            kde=True,
-            stat='density',
-            linewidth=0)
-        fig = axis.get_figure()
-        fig.savefig(path.join(out_path, 'images', 'eda', column + '.pdf'))
-
-    plt.figure(figsize=(20, 10))
-    axis = sns.heatmap(
-        dataframe.corr(),
-        annot=False,
-        cmap='Dark2_r',
-        linewidths=2)
-    fig = axis.get_figure()
-    fig.savefig(path.join(out_path, 'images', 'eda', 'Correlations' + '.pdf'))
 
 
 def encoder_helper(
@@ -127,7 +115,7 @@ def encoder_helper(
 
 def perform_feature_engineering(
         dataframe: pd.DataFrame,
-        response: str = constants.CHURN):
+        response: str = constants.CHURN) -> typing.Tuple:
     """
     input: df: pandas dataframe response: string of response name [optional argument
                                             that could be used for naming variables or
@@ -148,7 +136,7 @@ def perform_feature_engineering(
     return x_train, x_test, y_train, y_test
 
 
-def classification_report_image(data_array, output_pth):
+def classification_report_image(data_array: typing.List, output_pth: str) -> None:
     """
     produces classification report for training and testing results and stores report as image
     in images folder
@@ -212,7 +200,10 @@ def classification_report_image(data_array, output_pth):
             plt.close()
 
 
-def feature_importance_plot(model, x_data, output_pth):
+def feature_importance_plot(
+        model,
+        x_data: pd.DataFrame,
+        output_pth: str):
     """
     creates and stores the feature importances in pth
     input:
@@ -251,7 +242,7 @@ def feature_importance_plot(model, x_data, output_pth):
     plt.close()
 
 
-def prediction_explainer_plot(model, x_test, output_pth):
+def prediction_explainer_plot(model, x_test: pd.DataFrame, output_pth: str) -> None:
     """
     creates and stores the prediction explainer figure in output_pth
     input:
@@ -278,7 +269,11 @@ def prediction_explainer_plot(model, x_test, output_pth):
     plt.close()
 
 
-def train_models(x_train, x_test, y_train, y_test, output_pth):
+def train_models(x_train: pd.DataFrame,
+                 x_test: pd.DataFrame,
+                 y_train: pd.DataFrame,
+                 y_test: pd.DataFrame,
+                 output_pth: str) -> None   :
     """
     train, store model results: images + scores, and store models
     input:

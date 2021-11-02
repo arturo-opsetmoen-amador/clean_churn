@@ -2,16 +2,16 @@
 File with constants used through the Churn analysis
 """
 
+EDA_ANALYSIS = ['Churn', 'Customer_Age', 'Marital_Status',
+                'Total_Trans_Ct', 'Correlations']
 
-HISTOGRAM_COLS = ['Churn', 'Customer_Age']
-VALUE_COUNT_COL = ['Marital_Status']
-DISTRIBUTION_COL = ['Total_Trans_Ct']
 CATEGORY_LST = [
     'Gender',
     'Education_Level',
     'Marital_Status',
     'Income_Category',
     'Card_Category']
+
 CHURN = 'Churn'
 
 KEEP_COLS = ['Customer_Age', 'Dependent_count', 'Months_on_book',
