@@ -5,9 +5,9 @@ import os
 from os import path
 import logging
 import pandas as pd
-import constants
 import joblib
 import churn_library as cl
+import constants
 
 
 def test_import(test_dataframe):
@@ -140,9 +140,17 @@ def test_train_models(features, tmpdir):
         "Feature_Importance",
             'Prediction_Explainer']:
         try:
-            with open(path.join(tmpdir, 'images', 'results', image_name + '.jpg')):
-                logging.info(
-                    "Testing train_models: Creating results images: SUCCESS")
+            assert path.isfile(
+                path.join(
+                    tmpdir,
+                    'images',
+                    'results',
+                    image_name +
+                    '.jpg')
+            )
+            logging.info(
+                    "Testing train_models: Creating results images: SUCCESS"
+            )
         except FileNotFoundError as err:
             logging.error(
                 "Testing train_models: Generated results images missing")
