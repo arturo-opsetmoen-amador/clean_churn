@@ -64,7 +64,7 @@ def perform_eda(dataframe: pd.DataFrame, out_path: str):
 
     for analysis in constants.EDA_ANALYSIS:
         plt.figure(figsize=(20, 10))
-        if analysis == "Churn" or analysis == 'Customer_Age':
+        if analysis in ("Churn", 'Customer_Age'):
             axis = dataframe[analysis].hist()
         elif analysis == 'Marital_Status':
             axis = dataframe[analysis].value_counts('normalize').plot(kind='bar')
