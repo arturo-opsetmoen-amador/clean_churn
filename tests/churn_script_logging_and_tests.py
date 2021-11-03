@@ -1,5 +1,5 @@
 """
-Add later
+Script to perform tests by use of the pytest suite
 """
 import os
 from os import path

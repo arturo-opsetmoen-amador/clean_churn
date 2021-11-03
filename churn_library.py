@@ -1,5 +1,5 @@
 """
-BETTER DESCRIPTION LATER ON: Library to predict churn. First assignment
+Library to predict churn. First assignment
 Udacity ML DevOps engineer course.
 Improve the doc string after looking at some examples and best practices.
 """
